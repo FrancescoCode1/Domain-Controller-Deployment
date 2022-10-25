@@ -1,14 +1,19 @@
+### stays the same for each DC
 $setHostnameDone = "C:\Temp\hostname_set.txt"
 $setDomainDone = "C:\Temp\domain_set.txt"
 $setIPDone = "C:\Temp\ip_set.txt"
 $setRunOnceDone = "C:\Temp\run_once_set.txt"
+### 
+
+
+###Change for each new DC
 $Passwort = ConvertTo-SecureString -String "Hallo123" -AsPlainText -Force
 $IPv4Address = "192.168.178.230"
 $standardGateway = "192.168.178.1"
 $PraefixLaenge = "24"
 $DomaenenName = "dedom01.de" 
 $serverHostname = "DEDC01"
-
+###
 
 function Set-Powershell 
 {
@@ -26,7 +31,7 @@ function Set_Hostname
 function Install_Domaincontroller 
 {
     Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools -Confirm
-    Install-ADDSForest -DomainName $DomaenenName -SafeModeAdministratorPassword (Convertto-SecureString -AsPlainText $Passwort -Force) -InstallDns
+    Install-ADDSForest -InstallDns -DomainName $DomaenenName -SafeModeAdministratorPassword (Convertto-SecureString -AsPlainText $Passwort -Force) -Force -Confirm:$false -LogPath C:\Log
     Install-WindowsFeature RSAT-AD-PowerShell -Confirm
     New-Item $setDomainDone
     Restart-Computer
